@@ -17,17 +17,17 @@ sudo apt install certbot
 通常情况下，Certbot的证书需要在域名解析到的服务器上申请，因为Let’s Encrypt CA需要验证您对该域名的控制权。具体来说，CA会向您的域名发送验证请求，这个请求需要由您的服务器处理并返回正确的响应。
 
 #### 验证方法
-1. HTTP-01 验证
+1. HTTP-01验证
     * 这是最常用的验证方法，Certbot会在您的服务器上创建一个临时文件，然后Let’s Encrypt CA会尝试访问这个文件以验证您对域名的控制权。这个请求会发送到域名解析到的服务器，因此必须在该服务器上运行Certbot。(意思就是certbot得安装在server上)
-2. DNS-01 验证
+2. DNS-01验证
     * 这种方法通过在您的DNS记录中添加一个特定的TXT记录来验证您对域名的控制权。这种方法不需要在域名解析到的服务器上运行Certbot，可以在任意服务器上操作，只要您能修改域名的DNS记录。
-3. TLS-ALPN-01 验证
+3. TLS-ALPN-01验证
     * 这种方法通过在特定端口（通常是443）上进行验证。它也需要在域名解析到的服务器上运行Certbot。
 
-##### 使用DNS-01方式验证
+##### 使用DNS-01方式验证(以下步骤经过我的验证有效)
 1. 申请证书
     ```
-    certbot certonly --manual --preferred-challenges dns -d example.com
+    sudo certbot certonly --manual --preferred-challenges dns -d example.com
     ```
     * `certbot certonly`：这是 Certbot 命令，用于生成证书（certificates only），不会配置 Web 服务器。
     * `--manual`：使用手动模式。这意味着 Certbot 不会自动配置或验证域名，而是需要用户手动完成 DNS 验证步骤。
@@ -106,4 +106,5 @@ sudo apt install certbot
     }
     ```
 
-    ### 证书续期
+### 证书续期
+* 查看所有证书：`sudo certbot certificates`,这个命令会列出 Certbot 当前管理的所有证书，包括每个证书的域名、过期时间、私钥路径和证书路径等详细信息。
