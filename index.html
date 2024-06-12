@@ -183,7 +183,7 @@
       </span>
       <span class="post-meta-item-text">نُشر في</span>
 
-      <time title="أُنشأ: 2024-06-12 16:31:36" itemprop="dateCreated datePublished" datetime="2024-06-12T16:31:36+08:00">2024-06-12</time>
+      <time title="أُنشأ: 2024-06-12 16:39:46" itemprop="dateCreated datePublished" datetime="2024-06-12T16:39:46+08:00">2024-06-12</time>
     </span>
 
   
@@ -242,7 +242,9 @@
 <li>privkey.pem：这是私钥文件，用于加密和解密数据，必须保密。(nginx使用)</li>
 </ul>
 </li>
-<li>nginx配置域名ssl <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen 80;</span><br><span class="line">    server_name example.com;</span><br><span class="line"></span><br><span class="line">    location / &#123;</span><br><span class="line">        return 301 https://$server_name$request_uri;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">    listen 443 ssl;</span><br><span class="line">    server_name example.com;</span><br><span class="line"></span><br><span class="line">    ssl_certificate /mnt/disk1/ssl/example.com/fullchain.pem;</span><br><span class="line">    ssl_certificate_key /mnt/disk1/ssl/example.com/privkey.pem;</span><br><span class="line"></span><br><span class="line">    ssl_protocols TLSv1.2 TLSv1.3;</span><br><span class="line">    ssl_ciphers HIGH:!aNULL:!MD5;</span><br><span class="line">    ssl_prefer_server_ciphers on;</span><br><span class="line">    ssl_session_cache shared:SSL:10m;</span><br><span class="line"></span><br><span class="line">    # 这里是反向代理，酌情处理</span><br><span class="line">    location / &#123;</span><br><span class="line">        proxy_pass http://localhost:8089;</span><br><span class="line"></span><br><span class="line">        proxy_set_header Host $host;</span><br><span class="line">        proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">        proxy_set_header X-Forwarded-Proto $scheme;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    access_log /var/log/nginx/example_com.access.log;</span><br><span class="line">    error_log /var/log/nginx/example_com.error.log;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>nginx配置域名ssl <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen 80;</span><br><span class="line">    server_name example.com;</span><br><span class="line"></span><br><span class="line">    location / &#123;</span><br><span class="line">        return 301 https://$server_name$request_uri;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">    listen 443 ssl;</span><br><span class="line">    server_name example.com;</span><br><span class="line"></span><br><span class="line">    ssl_certificate /mnt/disk1/ssl/example.com/fullchain.pem;</span><br><span class="line">    ssl_certificate_key /mnt/disk1/ssl/example.com/privkey.pem;</span><br><span class="line"></span><br><span class="line">    ssl_protocols TLSv1.2 TLSv1.3;</span><br><span class="line">    ssl_ciphers HIGH:!aNULL:!MD5;</span><br><span class="line">    ssl_prefer_server_ciphers on;</span><br><span class="line">    ssl_session_cache shared:SSL:10m;</span><br><span class="line"></span><br><span class="line">    # 这里是反向代理，酌情处理</span><br><span class="line">    location / &#123;</span><br><span class="line">        proxy_pass http://localhost:8089;</span><br><span class="line"></span><br><span class="line">        proxy_set_header Host $host;</span><br><span class="line">        proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">        proxy_set_header X-Forwarded-Proto $scheme;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    access_log /var/log/nginx/example_com.access.log;</span><br><span class="line">    error_log /var/log/nginx/example_com.error.log;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="证书续期"><a href="#证书续期" class="headerlink" title="证书续期"></a>证书续期</h3></li>
 </ol>
 
       
@@ -299,7 +301,7 @@
       </span>
       <span class="post-meta-item-text">نُشر في</span>
 
-      <time title="أُنشأ: 2024-06-12 16:31:36" itemprop="dateCreated datePublished" datetime="2024-06-12T16:31:36+08:00">2024-06-12</time>
+      <time title="أُنشأ: 2024-06-12 16:39:46" itemprop="dateCreated datePublished" datetime="2024-06-12T16:39:46+08:00">2024-06-12</time>
     </span>
 
   
@@ -380,7 +382,7 @@
       </span>
       <span class="post-meta-item-text">نُشر في</span>
 
-      <time title="أُنشأ: 2024-06-12 16:31:36" itemprop="dateCreated datePublished" datetime="2024-06-12T16:31:36+08:00">2024-06-12</time>
+      <time title="أُنشأ: 2024-06-12 16:39:46" itemprop="dateCreated datePublished" datetime="2024-06-12T16:39:46+08:00">2024-06-12</time>
     </span>
 
   
@@ -456,7 +458,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">عُدل في</span>
-      <time title="عُدل: 2024-06-12 16:31:36" itemprop="dateModified" datetime="2024-06-12T16:31:36+08:00">2024-06-12</time>
+      <time title="عُدل: 2024-06-12 16:39:46" itemprop="dateModified" datetime="2024-06-12T16:39:46+08:00">2024-06-12</time>
     </span>
 
   
@@ -628,7 +630,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">عُدل في</span>
-      <time title="عُدل: 2024-06-12 16:31:36" itemprop="dateModified" datetime="2024-06-12T16:31:36+08:00">2024-06-12</time>
+      <time title="عُدل: 2024-06-12 16:39:46" itemprop="dateModified" datetime="2024-06-12T16:39:46+08:00">2024-06-12</time>
     </span>
 
   
