@@ -183,7 +183,7 @@
       </span>
       <span class="post-meta-item-text">نُشر في</span>
 
-      <time title="أُنشأ: 2024-06-12 16:41:52" itemprop="dateCreated datePublished" datetime="2024-06-12T16:41:52+08:00">2024-06-12</time>
+      <time title="أُنشأ: 2024-06-12 17:06:42" itemprop="dateCreated datePublished" datetime="2024-06-12T17:06:42+08:00">2024-06-12</time>
     </span>
 
   
@@ -202,21 +202,21 @@
 
 <h3 id="申请证书"><a href="#申请证书" class="headerlink" title="申请证书"></a>申请证书</h3><p>通常情况下，Certbot的证书需要在域名解析到的服务器上申请，因为Let’s Encrypt CA需要验证您对该域名的控制权。具体来说，CA会向您的域名发送验证请求，这个请求需要由您的服务器处理并返回正确的响应。</p>
 <h4 id="验证方法"><a href="#验证方法" class="headerlink" title="验证方法"></a>验证方法</h4><ol>
-<li>HTTP-01 验证<ul>
+<li>HTTP-01验证<ul>
 <li>这是最常用的验证方法，Certbot会在您的服务器上创建一个临时文件，然后Let’s Encrypt CA会尝试访问这个文件以验证您对域名的控制权。这个请求会发送到域名解析到的服务器，因此必须在该服务器上运行Certbot。(意思就是certbot得安装在server上)</li>
 </ul>
 </li>
-<li>DNS-01 验证<ul>
+<li>DNS-01验证<ul>
 <li>这种方法通过在您的DNS记录中添加一个特定的TXT记录来验证您对域名的控制权。这种方法不需要在域名解析到的服务器上运行Certbot，可以在任意服务器上操作，只要您能修改域名的DNS记录。</li>
 </ul>
 </li>
-<li>TLS-ALPN-01 验证<ul>
+<li>TLS-ALPN-01验证<ul>
 <li>这种方法通过在特定端口（通常是443）上进行验证。它也需要在域名解析到的服务器上运行Certbot。</li>
 </ul>
 </li>
 </ol>
-<h5 id="使用DNS-01方式验证"><a href="#使用DNS-01方式验证" class="headerlink" title="使用DNS-01方式验证"></a>使用DNS-01方式验证</h5><ol>
-<li>申请证书 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">certbot certonly --manual --preferred-challenges dns -d example.com</span><br></pre></td></tr></table></figure>
+<h5 id="使用DNS-01方式验证-以下步骤经过我的验证有效"><a href="#使用DNS-01方式验证-以下步骤经过我的验证有效" class="headerlink" title="使用DNS-01方式验证(以下步骤经过我的验证有效)"></a>使用DNS-01方式验证(以下步骤经过我的验证有效)</h5><ol>
+<li>申请证书 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo certbot certonly --manual --preferred-challenges dns -d example.com</span><br></pre></td></tr></table></figure>
 <ul>
 <li><code>certbot certonly</code>：这是 Certbot 命令，用于生成证书（certificates only），不会配置 Web 服务器。</li>
 <li><code>--manual</code>：使用手动模式。这意味着 Certbot 不会自动配置或验证域名，而是需要用户手动完成 DNS 验证步骤。</li>
@@ -242,10 +242,11 @@
 <li>privkey.pem：这是私钥文件，用于加密和解密数据，必须保密。(nginx使用)</li>
 </ul>
 </li>
-<li>nginx配置域名ssl <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen 80;</span><br><span class="line">    server_name example.com;</span><br><span class="line"></span><br><span class="line">    location / &#123;</span><br><span class="line">        return 301 https://$server_name$request_uri;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">    listen 443 ssl;</span><br><span class="line">    server_name example.com;</span><br><span class="line"></span><br><span class="line">    ssl_certificate /mnt/disk1/ssl/example.com/fullchain.pem;</span><br><span class="line">    ssl_certificate_key /mnt/disk1/ssl/example.com/privkey.pem;</span><br><span class="line"></span><br><span class="line">    ssl_protocols TLSv1.2 TLSv1.3;</span><br><span class="line">    ssl_ciphers HIGH:!aNULL:!MD5;</span><br><span class="line">    ssl_prefer_server_ciphers on;</span><br><span class="line">    ssl_session_cache shared:SSL:10m;</span><br><span class="line"></span><br><span class="line">    # 这里是反向代理，酌情处理</span><br><span class="line">    location / &#123;</span><br><span class="line">        proxy_pass http://localhost:8089;</span><br><span class="line"></span><br><span class="line">        proxy_set_header Host $host;</span><br><span class="line">        proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">        proxy_set_header X-Forwarded-Proto $scheme;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    access_log /var/log/nginx/example_com.access.log;</span><br><span class="line">    error_log /var/log/nginx/example_com.error.log;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="证书续期"><a href="#证书续期" class="headerlink" title="证书续期"></a>证书续期</h3></li>
+<li>nginx配置域名ssl <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen 80;</span><br><span class="line">    server_name example.com;</span><br><span class="line"></span><br><span class="line">    location / &#123;</span><br><span class="line">        return 301 https://$server_name$request_uri;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">    listen 443 ssl;</span><br><span class="line">    server_name example.com;</span><br><span class="line"></span><br><span class="line">    ssl_certificate /mnt/disk1/ssl/example.com/fullchain.pem;</span><br><span class="line">    ssl_certificate_key /mnt/disk1/ssl/example.com/privkey.pem;</span><br><span class="line"></span><br><span class="line">    ssl_protocols TLSv1.2 TLSv1.3;</span><br><span class="line">    ssl_ciphers HIGH:!aNULL:!MD5;</span><br><span class="line">    ssl_prefer_server_ciphers on;</span><br><span class="line">    ssl_session_cache shared:SSL:10m;</span><br><span class="line"></span><br><span class="line">    # 这里是反向代理，酌情处理</span><br><span class="line">    location / &#123;</span><br><span class="line">        proxy_pass http://localhost:8089;</span><br><span class="line"></span><br><span class="line">        proxy_set_header Host $host;</span><br><span class="line">        proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">        proxy_set_header X-Forwarded-Proto $scheme;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    access_log /var/log/nginx/example_com.access.log;</span><br><span class="line">    error_log /var/log/nginx/example_com.error.log;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
 </ol>
+<h3 id="证书续期"><a href="#证书续期" class="headerlink" title="证书续期"></a>证书续期</h3><ul>
+<li>查看所有证书：<code>sudo certbot certificates</code>,这个命令会列出 Certbot 当前管理的所有证书，包括每个证书的域名、过期时间、私钥路径和证书路径等详细信息。</li>
+</ul>
 
       
     </div>
@@ -301,7 +302,7 @@
       </span>
       <span class="post-meta-item-text">نُشر في</span>
 
-      <time title="أُنشأ: 2024-06-12 16:41:52" itemprop="dateCreated datePublished" datetime="2024-06-12T16:41:52+08:00">2024-06-12</time>
+      <time title="أُنشأ: 2024-06-12 17:06:42" itemprop="dateCreated datePublished" datetime="2024-06-12T17:06:42+08:00">2024-06-12</time>
     </span>
 
   
@@ -382,7 +383,7 @@
       </span>
       <span class="post-meta-item-text">نُشر في</span>
 
-      <time title="أُنشأ: 2024-06-12 16:41:52" itemprop="dateCreated datePublished" datetime="2024-06-12T16:41:52+08:00">2024-06-12</time>
+      <time title="أُنشأ: 2024-06-12 17:06:42" itemprop="dateCreated datePublished" datetime="2024-06-12T17:06:42+08:00">2024-06-12</time>
     </span>
 
   
@@ -458,7 +459,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">عُدل في</span>
-      <time title="عُدل: 2024-06-12 16:41:52" itemprop="dateModified" datetime="2024-06-12T16:41:52+08:00">2024-06-12</time>
+      <time title="عُدل: 2024-06-12 17:06:42" itemprop="dateModified" datetime="2024-06-12T17:06:42+08:00">2024-06-12</time>
     </span>
 
   
@@ -630,7 +631,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">عُدل في</span>
-      <time title="عُدل: 2024-06-12 16:41:52" itemprop="dateModified" datetime="2024-06-12T16:41:52+08:00">2024-06-12</time>
+      <time title="عُدل: 2024-06-12 17:06:42" itemprop="dateModified" datetime="2024-06-12T17:06:42+08:00">2024-06-12</time>
     </span>
 
   
