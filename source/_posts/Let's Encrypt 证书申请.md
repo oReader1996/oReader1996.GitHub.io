@@ -105,3 +105,5 @@ sudo apt install certbot
         error_log /var/log/nginx/example_com.error.log;
     }
     ```
+
+    ### 证书续期
