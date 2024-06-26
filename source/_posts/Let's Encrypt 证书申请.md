@@ -108,3 +108,5 @@ sudo apt install certbot
 
 ### 证书续期
 * 查看所有证书：`sudo certbot certificates`,这个命令会列出 Certbot 当前管理的所有证书，包括每个证书的域名、过期时间、私钥路径和证书路径等详细信息。
+* Let's Encrypt 证书的有效期为 90 天。通常情况下，建议在证书到期前 30 天内进行续费，以确保证书不会过期。
+* 续期命令:`sudo certbot renew`
